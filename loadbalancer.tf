@@ -2,8 +2,8 @@ resource "aws_lb" "testloadbalancer" {
     name = "testloadbalancer"
     internal = false
     load_balancer_type = "application"
-    security_groups = [aws_security_group.testsecuritygroup.id]
-    subnets = [aws_subnet.testsubnet1.id, aws_subnet.testsubnet2.id, aws_subnet.testsubnet3.id]
+    security_groups = [aws_security_group.public-tier-securitygroup.id]
+    subnets = [aws_subnet.public-subnet1.id, aws_subnet.public-subnet2.id, aws_subnet.public-subnet3.id]
 }
 resource "aws_lb_listener" "testloadbalancerlistener" {
     load_balancer_arn = aws_lb.testloadbalancer.arn
