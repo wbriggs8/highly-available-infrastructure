@@ -10,7 +10,7 @@ resource "aws_db_instance" "testrdsinstance" {
     parameter_group_name = "default.mysql8.0"
     skip_final_snapshot = true
     vpc_security_group_ids = [aws_security_group.private-tier-securitygroup.id]
-    db_subnet_group_name = aws_subnet_group.testdbsubnetgroup.name
+    db_subnet_group_name = aws_db_subnet_group.testdbsubnetgroup.name
     multi_az = false
     storage_encrypted = true
     kms_key_id = aws_kms_key.testkmskey.arn

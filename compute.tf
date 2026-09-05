@@ -38,9 +38,9 @@ resource "aws_cloudwatch_metric_alarm" "cpucloudwatchalarm" {
     }
 
     alarm_actions = [
-        aws_autoscaling_policy.testautoscalingpolicy.arn,
+        aws_autoscaling_policy.cpuautoscalingpolicy.arn,
         # connects cloudwatch alarm to the autoscaling policy to trigger it
-        aws_sns_topic.testsnstopic.asg_alerts.arn
+        aws_sns_topic.testsnstopic.arn
         # connects cloudwatch alarm to the sns topic to send an alert when the alarm is triggered
     ]
 }    
