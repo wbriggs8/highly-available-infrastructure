@@ -55,8 +55,9 @@ resource "aws_security_group_rule" "private-tier-securitygroup-rule" {
     protocol = "tcp"
     source_security_group_id = aws_security_group.public-tier-securitygroup.id
     security_group_id = aws_security_group.private-tier-securitygroup.id
-
+# Open port 3306 for MySQL traffic from the public SG to the private SG
 }
+
 # ----------------- PRIVATE TIER SECURITY GROUPS END -----------------
 resource "aws_subnet" "public-subnet1" {
     vpc_id = aws_vpc.testvpc.id

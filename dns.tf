@@ -1,0 +1,1 @@
+# need to register domain on third-party as AWS doesn't allow it on free tier
