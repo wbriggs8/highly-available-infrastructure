@@ -22,7 +22,7 @@ resource "aws_autoscaling_policy" "cpuautoscalingpolicy" {
     autoscaling_group_name = aws_autoscaling_group.testautoscalinggroup.name
 }
 # adds one EC2 instance to the asg when the alarm triggers the CPU utilization to be greater than 70% for 2 consecutive periods of 120 seconds each
-resource "cloudwatch_metric_alarm" "cpucloudwatchalarm" {
+resource "aws_cloudwatch_metric_alarm" "cpucloudwatchalarm" {
     alarm_name = "cpucloudwatchalarm"
     comparison_operator = "GreaterThanThreshold"
     evaluation_periods = 2

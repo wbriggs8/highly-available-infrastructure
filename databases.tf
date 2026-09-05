@@ -1,4 +1,4 @@
-resource "rds_instance" "testrdsinstance" {
+resource "aws_rds_instance" "testrdsinstance" {
     allocated_storage = 20
     max_allocated_storage = 50
     min_allocated_storage = 20
