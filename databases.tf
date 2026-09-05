@@ -1,11 +1,10 @@
-resource "aws_rds_instance" "testrdsinstance" {
+resource "aws_db_instance" "testrdsinstance" {
     allocated_storage = 20
     max_allocated_storage = 50
-    min_allocated_storage = 20
     engine = "mysql"
     engine_version = "8.0"
     instance_class = "db.tg4.micro"
-    name = "testdb"
+    db_name = "testdb"
     username = "admin"
     password = aws_secretsmanager_secret_version.db_password.secret_string
     parameter_group_name = "default.mysql8.0"
