@@ -80,5 +80,11 @@ resource "aws_subnet" "private-subnet" {
     availability_zone = "us-east-1a"
 
 }
+resource "aws_subnet" "private-subnet2" {
+    vpc_id = aws_vpc.testvpc.id
+    cidr_block = "10.0.5.0/24"
+    availability_zone = "us-east-1b"
+
+}
 # FOUR SUBNETS CREATED, 3 PUBLIC FOR ASG, 1 PRIVATE FOR DATABASE (ONLY 1 FOR FREE TIER)
 # ----------------- SUBNETS END -----------------

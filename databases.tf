@@ -19,7 +19,7 @@ resource "aws_db_instance" "testrdsinstance" {
 # used default parameter group as well as defined the subnet group + security group for the db
 resource "aws_db_subnet_group" "testdbsubnetgroup" {
     name = "testdbsubnetgroup"
-    subnet_ids = [aws_subnet.private-subnet.id]
+    subnet_ids = [aws_subnet.private-subnet.id, aws_subnet.private-subnet2.id]
 }
 resource "aws_kms_key" "testkmskey" {
     description = "KMS key for RDS encryption"
