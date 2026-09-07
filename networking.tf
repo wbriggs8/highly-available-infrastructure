@@ -88,3 +88,30 @@ resource "aws_subnet" "private-subnet2" {
 }
 # FOUR SUBNETS CREATED, 3 PUBLIC FOR ASG, 1 PRIVATE FOR DATABASE (ONLY 1 FOR FREE TIER)
 # ----------------- SUBNETS END -----------------
+resource "aws_iam_role" "testiamrole" {
+    name = "testiamrole"
+    assume_role_policy = jsonencode({
+        # "jsonencode" function converts the policy to a JSON string
+        Version = "2012-10-17"
+        Statement = [
+            {
+                Action = "sts:AssumeRole"
+                Effect = "Allow"
+                Principal = {
+                    Service = "ec2.amazonaws.com"
+                    # allows only the Principal "ec2.amazonaws.com" to assume the role
+                }
+            }
+        ]
+    })
+}
+
+resource "aws_iam_role_policy_attachment" "testiamrolepolicyattachment" {
+    role = aws_iam_role.testiamrole.name
+    policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}# connects the IAM role to the Amazon SSM Managed Instance Core policy, allowing EC2 instances to use Systems Manager features
+
+resource "aws_iam_instance_profile" "testinstanceprofile" {
+    name = "testinstanceprofile"
+    role = aws_iam_role.testiamrole.name
+}# creates an IAM instance profile and associates it with the test IAM role, similar to how an EC2 instance to an EBS Volume its like a container
