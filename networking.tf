@@ -12,7 +12,6 @@ resource "aws_route_table" "testpublicroutetable" {
         gateway_id = aws_internet_gateway.testinternetgateway.id
     }
 }
-
 resource "aws_route_table_association" "testpublicroutetableassociation1" {
     subnet_id = aws_subnet.public-subnet1.id
     route_table_id = aws_route_table.testpublicroutetable.id
@@ -88,7 +87,7 @@ resource "aws_subnet" "private-subnet2" {
 }
 # FOUR SUBNETS CREATED, 3 PUBLIC FOR ASG, 1 PRIVATE FOR DATABASE (ONLY 1 FOR FREE TIER)
 # ----------------- SUBNETS END -----------------
-resource "aws_iam_role" "testiamrole" {
+resource "aws_iam_role" "testssmiamrole" {
     name = "testiamrole"
     assume_role_policy = jsonencode({
         # "jsonencode" function converts the policy to a JSON string
@@ -106,12 +105,12 @@ resource "aws_iam_role" "testiamrole" {
     })
 }
 
-resource "aws_iam_role_policy_attachment" "testiamrolepolicyattachment" {
-    role = aws_iam_role.testiamrole.name
+resource "aws_iam_role_policy_attachment" "testssmiamrolepolicyattachment" {
+    role = aws_iam_role.testssmiamrole.name
     policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }# connects the IAM role to the Amazon SSM Managed Instance Core policy, allowing EC2 instances to use Systems Manager features
 
-resource "aws_iam_instance_profile" "testinstanceprofile" {
-    name = "testinstanceprofile"
+resource "aws_iam_instance_profile" "testssminstanceprofile" {
+    name = "testssminstanceprofile"
     role = aws_iam_role.testiamrole.name
 }# creates an IAM instance profile and associates it with the test IAM role, similar to how an EC2 instance to an EBS Volume its like a container

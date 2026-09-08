@@ -1,7 +1,13 @@
 resource "aws_launch_template" "testlaunchconfiguration" {
     image_id = "ami-0ff8a91507f77f867"
     instance_type = "t3.micro"
-    vpc_security_group_ids = [aws_security_group.public-tier-securitygroup.id]
+    iam_instance_profile {
+        name = aws_iam_instance_profile.testssminstanceprofile.name
+    }
+    network_interfaces {
+        associate_public_ip_address = true
+        security_groups = [aws_security_group.public-tier-securitygroup.id]
+    }
 }
 # 3 PUBLIC SUBNETS, 1 PRIVATE SUBNET FOR DATABASE, 1 VPC
 resource "aws_autoscaling_group" "testautoscalinggroup" {
