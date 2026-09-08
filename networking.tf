@@ -88,7 +88,7 @@ resource "aws_subnet" "private-subnet2" {
 # FOUR SUBNETS CREATED, 3 PUBLIC FOR ASG, 1 PRIVATE FOR DATABASE (ONLY 1 FOR FREE TIER)
 # ----------------- SUBNETS END -----------------
 resource "aws_iam_role" "testssmiamrole" {
-    name = "testiamrole"
+    name = "testssmiamrole"
     assume_role_policy = jsonencode({
         # "jsonencode" function converts the policy to a JSON string
         Version = "2012-10-17"
