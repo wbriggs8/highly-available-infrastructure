@@ -1,5 +1,5 @@
 resource "aws_launch_template" "testlaunchconfiguration" {
-    image_id = "ami-0ff8a91507f77f867"
+    image_id = "ami-081b0a6eac00b4f53"
     instance_type = "t3.micro"
     iam_instance_profile {
         name = aws_iam_instance_profile.testssminstanceprofile.name
@@ -11,6 +11,7 @@ resource "aws_launch_template" "testlaunchconfiguration" {
 }
 # 3 PUBLIC SUBNETS, 1 PRIVATE SUBNET FOR DATABASE, 1 VPC
 resource "aws_autoscaling_group" "testautoscalinggroup" {
+    name = "testautoscalinggroup"
     desired_capacity = 3
     max_size = 6
     min_size = 3
