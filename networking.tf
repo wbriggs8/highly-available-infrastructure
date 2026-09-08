@@ -112,5 +112,5 @@ resource "aws_iam_role_policy_attachment" "testssmiamrolepolicyattachment" {
 
 resource "aws_iam_instance_profile" "testssminstanceprofile" {
     name = "testssminstanceprofile"
-    role = aws_iam_role.testiamrole.name
+    role = aws_iam_role.testssmiamrole.name
 }# creates an IAM instance profile and associates it with the test IAM role, similar to how an EC2 instance to an EBS Volume its like a container
