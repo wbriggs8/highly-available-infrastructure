@@ -37,7 +37,18 @@ resource "aws_security_group_rule" "public-tier-securitygroup-rule" {
     type = "ingress"
     from_port = 80
     to_port = 80
+    # HTTP inbound traffic only
     protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    security_group_id = aws_security_group.public-tier-securitygroup.id
+}
+resource "aws_security_group_rule" "public-tier-securitygroup-rule-egress" {
+    type = "egress"
+    from_port = 0
+    to_port = 0
+    # means all ports ONLY WORKS BECAUSE PROTOCOL IS SET TO -1
+    protocol = "-1"
+    # means all protocols for example tcp udp icmp etc
     cidr_blocks = ["0.0.0.0/0"]
     security_group_id = aws_security_group.public-tier-securitygroup.id
 }
