@@ -59,5 +59,5 @@ resource "aws_sns_topic_subscription" "testsnstopicsubscription" {
     # connects the sns topic subscription to the sns topic resource
     protocol = "email"
     # protocl is for where you want the SNS to send the alert, in this case email
-    endpoint = "williambriggs912@gmail.com"
+    endpoint = "youremail@example.com"
 }
