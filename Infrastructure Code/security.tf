@@ -4,7 +4,7 @@ data "aws_acm_certificate" "cert" {
   most_recent = true
 }
 # looks inside certificate manager for the cname certificate instead of hardcoding it
-
+# -------------------- WAF CONFIGURATION ------------------------------
 resource "aws_wafv2_web_acl_association" "wordpres-waf-association" {
      resource_arn = aws_lb.load-balancer-us-east-1.arn
      web_acl_arn = aws_wafv2_web_acl.wordpress-waf.arn
