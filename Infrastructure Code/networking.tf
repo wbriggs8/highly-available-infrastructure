@@ -64,7 +64,7 @@ resource "aws_route_table_association" "private-route-table-association3" {
 # ------------------- PRIVATE ROUTE TABLES -----------------
 resource "aws_security_group" "public-tier-securitygroup" {
     name = "public-tier-securitygroup"
-    description = "HTTP inbound traffic"
+    description = "HTTP/HTTPS inbound traffic"
     vpc_id = aws_vpc.vpc-us-east-1.id
 }
 resource "aws_security_group_rule" "public-tier-securitygroup-rule-ingress1" {
@@ -145,6 +145,21 @@ resource "aws_security_group_rule" "database-tier-securitygroup-rule" {
 # Open port 3306 for MySQL traffic from the application SG to the database SG
 } 
 # ----------------- PRIVATE TIER SECURITY GROUPS END -----------------
+resource "aws_security_group" "efs-security-group"{
+    name = "efs_security_group"
+    description = "Allows the application tier to access the EFS filesystem and retrieve the Wordpress user data"
+    vpc_id = aws_vpc.vpc-us-east-1.id
+}
+resource "aws_security_group_rule" "efs-security-group-rule" {
+    type = "ingress"
+    from_port = 2049
+    to_port = 2049
+    protocol = "tcp"
+    source_security_group_id = aws_security_group.application-tier-securitygroup.id
+    security_group_id = aws_security_group.efs-security-group.id
+    # opens port 2049 for the NFS server to allow the asg in the application tier to access the mounted efs filesystem and retrive the user data for the wordpress application
+}
+# ----------------- EFS SECURITY GROUPS END -----------------
 resource "aws_subnet" "public-subnet1" {
     vpc_id = aws_vpc.vpc-us-east-1.id
     cidr_block = "10.0.1.0/24"
@@ -205,7 +220,7 @@ resource "aws_nat_gateway" "nat-gateway" {
 }
 # in the public subnet, the NAT gateway allows instances in the private subnet to access the internet for updates and patches, while preventing inbound traffic from the internet to the private subnet
 #----------------- NAT GATEWAY END -----------------
-resource "aws_iam_role" "ssm-iam-role" {
+resource "aws_iam_role" "ec2-iam-role" {
     name = "ssm-iam-role"
     assume_role_policy = jsonencode({
         # "jsonencode" function converts the policy to a JSON string
@@ -223,12 +238,34 @@ resource "aws_iam_role" "ssm-iam-role" {
     })
 }
 
-resource "aws_iam_role_policy_attachment" "ssm-iam-role-policy-attachment" {
-    role = aws_iam_role.ssm-iam-role.name
+resource "aws_iam_role_policy_attachment" "ssm-iam-role-role-policy-attachment" {
+    role = aws_iam_role.ec2-iam-role.name
     policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }# connects the IAM role to the Amazon SSM Managed Instance Core policy, allowing EC2 instances to use Systems Manager features
 
-resource "aws_iam_instance_profile" "ssm-instance-profile" {
-    name = "ssm-instance-profile"
-    role = aws_iam_role.ssm-iam-role.name
-}# creates an IAM instance profile and associates it with the ssm-iam-role, similar to how an EC2 instance to an EBS Volume its like a container
+resource "aws_iam_instance_profile" "ec2-instance-profile" {
+    name = "ec2-instance-profile"
+    role = aws_iam_role.ec2-iam-role.name
+}# creates an IAM instance profile and associates it with the ec2-iam-role, similar to how an EC2 instance to an EBS Volume its like a container
+
+resource "aws_iam_policy" "secrets-manager-policy" {
+    name = "secrets-manager-role-policy"
+    policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "secretsmanager:GetSecretValue",
+        ]
+        Effect   = "Allow"
+        Resource = aws_secretsmanager_secret.db_password.arn
+      },
+    ]
+  })
+}
+# gives ec2 permission to use getsecretvalue using secrets manager
+resource "aws_iam_role_policy_attachment" "secrets-manager-policy-attachment" {
+    role = aws_iam_role.ec2-iam-role.name
+    policy_arn = aws_iam_policy.secrets-manager-policy.arn
+}
+# attaches the secrets manager policy to the iam role

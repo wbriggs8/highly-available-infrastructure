@@ -13,4 +13,4 @@ resource "aws_secretsmanager_secret_version" "db_password" {
     secret_id = aws_secretsmanager_secret.db_password.id
     secret_string = random_password.db_password.result
 }
-# stores the actual secret in the AWS Secrets Manager container for automatic rotation and secure storage
+# stores the actual secret in the AWS Secrets Manager container for secure storage
