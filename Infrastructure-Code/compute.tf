@@ -6,6 +6,11 @@ resource "aws_launch_template" "main-launchconfiguration-webserver" {
         name = aws_iam_instance_profile.ec2-instance-profile.name
     }
     # tells the template to use the instance profile on ssm and secrets manager for all instances using the template
+    depends_on = [
+    aws_efs_mount_target.wp-efs-mount-target1,
+    aws_efs_mount_target.wp-efs-mount-target2,
+    aws_efs_mount_target.wp-efs-mount-target3
+  ]
     user_data = base64encode(templatefile("${path.module}/user_data.sh", {
   efs_id = aws_efs_file_system.wp-efs-file-system.id
   db_host = aws_db_instance.main-rds-instance.address
@@ -21,7 +26,7 @@ resource "aws_autoscaling_group" "main-autoscaling-group" {
     desired_capacity = 3
     max_size = 6
     min_size = 3
-    target_group_arns = [aws_lb_target_group.load-balancer-us-east-1-target-group.arn]
+    target_group_arns = [aws_lb_target_group.load-balancer-target-group.arn]
     # references the alb target group it will be attached to
     vpc_zone_identifier = [aws_subnet.application-subnet1.id, aws_subnet.application-subnet2.id, aws_subnet.application-subnet3.id]
     launch_template {
@@ -61,6 +66,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-cloudwatch-alarm" {
 }    
 resource "aws_sns_topic" "cpu-sns-topic" {
     name = "cpu-sns-topic"
+    kms_master_key_id = aws_kms_key.main-kms-key.arn
 }
 resource "aws_sns_topic_subscription" "cpu-sns-topic-subscription" {
     topic_arn = aws_sns_topic.cpu-sns-topic.arn

@@ -6,7 +6,7 @@ resource "aws_db_instance" "main-rds-instance" {
     engine = "mysql"
     engine_version = "8.0"
     instance_class = "db.t4g.micro"
-    db_name = "main-sql-db"
+    db_name = "mainsqldb"
     username = "admin"
     password = aws_secretsmanager_secret_version.db_password.secret_string
     # password is retrieved from the AWS Secrets Manager secret version resource, which stores the actual secret in a secure manner
@@ -19,8 +19,8 @@ resource "aws_db_instance" "main-rds-instance" {
     multi_az = false
     # turned off due to aws free tier, but in production, it should be turned on for high availability
     storage_encrypted = true
-    kms_key_id = aws_kms_key.main-kms-key.id
-    # publicly_accessible = true THIS IS FOR THE CHECKOV CHECK
+    kms_key_id = aws_kms_key.main-kms-key.arn
+    publicly_accessible = true 
 }
 # rds instance defines the engine + version, the class, where it gets its password + how its encrypted
 # used default parameter group as well as defined the subnet group + security group for the db

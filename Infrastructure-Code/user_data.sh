@@ -22,7 +22,7 @@ cat > /var/www/html/wp-config.php << EOF
 <?php
 define('DB_NAME', '${db_name}');
 define('DB_USER', '${username}');
-define('DB_PASSWORD', '${db_password}');
+define('DB_PASSWORD', '$${db_password}');
 define('DB_HOST', '${db_host}');
 EOF
 # tells wordpress how to connect to the database, references necesarry information that is injected on boot from the launch configuration

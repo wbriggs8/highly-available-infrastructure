@@ -1,5 +1,5 @@
 data "aws_acm_certificate" "cert" {
-  domain      = "wbsecurecloud.dev"
+  domain      = "www.wbsecurecloud.dev"
   statuses    = ["ISSUED"]
   most_recent = true
 }

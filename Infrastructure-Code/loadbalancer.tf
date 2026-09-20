@@ -29,12 +29,12 @@ resource "aws_lb_listener" "load-balancer-listener-https-us-east-1" {
     # references acm certificate in aws instead of hard coding
     default_action {
         type = "forward"
-        target_group_arn = aws_lb_target_group.load-balancer-us-east-1-target-group.arn
+        target_group_arn = aws_lb_target_group.load-balancer-target-group.arn
     }
 }
-resource "aws_lb_target_group" "load-balancer-us-east-1-target-group" {
-    name = "load-balancer-us-east-1-target-group"
-    port = 80
+resource "aws_lb_target_group" "load-balancer-target-group" {
+    name = "load-balancer-target-group"
+    port = 443
     protocol = "HTTP"
     vpc_id = aws_vpc.vpc-us-east-1.id
 }
