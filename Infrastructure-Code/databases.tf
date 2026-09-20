@@ -16,7 +16,7 @@ resource "aws_db_instance" "main-rds-instance" {
     # skips final snapshot after the db is deleted (good for testing environments)
     vpc_security_group_ids = [aws_security_group.database-tier-securitygroup.id]
     db_subnet_group_name = aws_db_subnet_group.rds-dbsubnet-group.name
-    multi_az = false
+    multi_az = true
     # turned off due to aws free tier, but in production, it should be turned on for high availability
     storage_encrypted = true
     kms_key_id = aws_kms_key.main-kms-key.arn
