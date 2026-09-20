@@ -20,7 +20,7 @@ resource "aws_db_instance" "main-rds-instance" {
     # turned off due to aws free tier, but in production, it should be turned on for high availability
     storage_encrypted = true
     kms_key_id = aws_kms_key.main-kms-key.arn
-    publicly_accessible = true 
+    # publicly_accessible = FOR THE TEST ONLY
 }
 # rds instance defines the engine + version, the class, where it gets its password + how its encrypted
 # used default parameter group as well as defined the subnet group + security group for the db
