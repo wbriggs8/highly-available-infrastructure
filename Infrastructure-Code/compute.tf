@@ -7,15 +7,15 @@ resource "aws_launch_template" "main-launchconfiguration-webserver" {
     }
     # tells the template to use the instance profile on ssm and secrets manager for all instances using the template
     depends_on = [
-    aws_efs_mount_target.wp-efs-mount-target1,
-    aws_efs_mount_target.wp-efs-mount-target2,
-    aws_efs_mount_target.wp-efs-mount-target3
+        aws_efs_mount_target.wp-efs-mount-target1,
+        aws_efs_mount_target.wp-efs-mount-target2,
+        aws_efs_mount_target.wp-efs-mount-target3
   ]
     user_data = base64encode(templatefile("${path.module}/user_data.sh", {
-  efs_id = aws_efs_file_system.wp-efs-file-system.id
-  db_host = aws_db_instance.main-rds-instance.address
-  db_name = aws_db_instance.main-rds-instance.db_name
-  username = aws_db_instance.main-rds-instance.username
+        efs_id = aws_efs_file_system.wp-efs-file-system.id
+        db_host = aws_db_instance.main-rds-instance.address
+        db_name = aws_db_instance.main-rds-instance.db_name
+        username = aws_db_instance.main-rds-instance.username
   # all 4 variables are injected into the user_data.sh file on start up instead of being hardcoded
 }))
 
